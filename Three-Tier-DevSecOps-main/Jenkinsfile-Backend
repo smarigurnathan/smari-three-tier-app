@@ -19,12 +19,12 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/laxman-kandhukuri/Three-Tier-DevSecOps'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/smarigurnathan/smari-three-tier-app.git'
             }
         }
         stage('Sonarqube Analysis') {
             steps {
-                dir('Application-Code/backend') {
+                dir('Three-Tier-DevSecOps-main/Application-Code/backend') {
                     withSonarQubeEnv('sonar-server') {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectName=three-tier-back \
@@ -42,15 +42,17 @@ pipeline {
         }
         stage('OWASP Dependency-Check Scan') {
             steps {
-                dir('Application-Code/backend') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dir('Three-Tier-DevSecOps-main/Application-Code/backend') {
+                    withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_KEY')]) {
+                        dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey $NVD_KEY', odcInstallation: 'DP-Check'
+                    }
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
             }
         }
         stage('Trivy File Scan') {
             steps {
-                dir('Application-Code/backend') {
+                dir('Three-Tier-DevSecOps-main/Application-Code/backend') {
                     sh 'trivy fs . > trivyfs.txt'
                 }
             }
@@ -58,7 +60,7 @@ pipeline {
         stage("Docker Image Build") {
             steps {
                 script {
-                    dir('Application-Code/backend') {
+                    dir('Three-Tier-DevSecOps-main/Application-Code/backend') {
                             sh 'docker system prune -f'
                             sh 'docker container prune -f'
                             sh 'docker build -t ${AWS_ECR_REPO_NAME} .'
@@ -82,20 +84,20 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/laxman-kandhukuri/Three-Tier-DevSecOps'
+                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/smarigurnathan/smari-three-tier-app.git'
             }
         }
         stage('Update Deployment file') {
             environment {
-                GIT_REPO_NAME = "Three-Tier-DevSecOps"
-                GIT_USER_NAME = "laxman-kandhukuri"
+                GIT_REPO_NAME = "smari-three-tier-app"
+                GIT_USER_NAME = "smarigurnathan"
             }
             steps {
-                dir('Kubernetes/Backend') {
+                dir('Three-Tier-DevSecOps-main/Kubernetes/Backend') {
                      withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''
-                            git config user.email "kandhukurilaxman96@gmail.com"
-                            git config user.name "laxman-kandhukuri"
+                            git config user.email "smari.gurunathan86@gmail.com"
+                            git config user.name "smarigurnathan"
                             BUILD_NUMBER=${BUILD_NUMBER}
                             echo $BUILD_NUMBER
                             imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
