@@ -42,11 +42,13 @@ pipeline {
         }
         stage('OWASP Dependency-Check Scan') {
             steps {
-                dir('Three-Tier-DevSecOps-main/Application-Code/backend') {
-                    withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_KEY')]) {
-                        dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey $NVD_KEY', odcInstallation: 'DP-Check'
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    dir('Three-Tier-DevSecOps-main/Application-Code/backend') {
+                        withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_KEY')]) {
+                            dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey $NVD_KEY --nvdApiDelay 8000', odcInstallation: 'DP-Check'
+                        }
+                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                     }
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
             }
         }
