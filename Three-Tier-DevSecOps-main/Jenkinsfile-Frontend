@@ -30,7 +30,7 @@ pipeline {
                 git(
                     branch: 'main',
                     credentialsId: 'github',
-                    url: 'https://github.com/laxman-kandhukuri/Three-Tier-DevSecOps'
+                    url: 'https://github.com/smarigurnathan/smari-three-tier-app.git'
                 )
             }
         }
@@ -173,7 +173,7 @@ pipeline {
                 git(
                     branch: 'main',
                     credentialsId: 'github',
-                    url: 'https://github.com/laxman-kandhukuri/Three-Tier-DevSecOps'
+                    url: 'https://github.com/smarigurnathan/smari-three-tier-app.git'
                 )
             }
         }
@@ -182,7 +182,7 @@ pipeline {
 
             environment {
                 GIT_REPO_NAME = 'Three-Tier-DevSecOps'
-                GIT_USER_NAME = 'laxman-kandhukuri'
+                GIT_USER_NAME = 'smarigurunathan'
             }
 
             steps {
@@ -200,8 +200,8 @@ pipeline {
                         sh '''
                             set +x
 
-                            git config user.email "kandhukurilaxman96@gmail.com"
-                            git config user.name "laxman-kandhukuri"
+                            git config user.email "smari.gurunathan86@gmail.com"
+                            git config user.name "smarigurnathan"
 
                             echo "Updating frontend deployment to image version: ${BUILD_NUMBER}"
 
