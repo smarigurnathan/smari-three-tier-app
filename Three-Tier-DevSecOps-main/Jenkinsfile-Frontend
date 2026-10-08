@@ -72,7 +72,7 @@ pipeline {
                     stageResult: 'UNSTABLE'
                 ) {
 
-                    dir('three-Tier-DevSecOps-main/Application-Code/frontend') {
+                    dir('Three-Tier-DevSecOps-main/Application-Code/frontend') {
 
                         withCredentials([
                             string(
