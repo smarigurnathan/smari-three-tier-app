@@ -37,7 +37,7 @@ pipeline {
 
         stage('Sonarqube Analysis') {
             steps {
-                dir('Application-Code/frontend') {
+                dir('Three-Tier-DevSecOps-main/Application-Code/frontend') {
                     withSonarQubeEnv('sonar-server') {
                         sh '''
                             $SCANNER_HOME/bin/sonar-scanner \
@@ -72,7 +72,7 @@ pipeline {
                     stageResult: 'UNSTABLE'
                 ) {
 
-                    dir('Application-Code/frontend') {
+                    dir('three-Tier-DevSecOps-main/Application-Code/frontend') {
 
                         withCredentials([
                             string(
@@ -103,7 +103,7 @@ pipeline {
 
         stage('Trivy File Scan') {
             steps {
-                dir('Application-Code/frontend') {
+                dir('Three-Tier-DevSecOps-main/Application-Code/frontend') {
                     sh '''
                         trivy fs . > trivyfs.txt
                     '''
@@ -114,7 +114,7 @@ pipeline {
         stage('Docker Image Build') {
             steps {
                 script {
-                    dir('Application-Code/frontend') {
+                    dir('Three-Tier-DevSecOps-main/Application-Code/frontend') {
 
                         sh '''
                             docker system prune -f
@@ -187,7 +187,7 @@ pipeline {
 
             steps {
 
-                dir('Kubernetes/Frontend') {
+                dir('Three-Tier-DevSecOps-main/Kubernetes/Frontend') {
 
                     withCredentials([
                         usernamePassword(
