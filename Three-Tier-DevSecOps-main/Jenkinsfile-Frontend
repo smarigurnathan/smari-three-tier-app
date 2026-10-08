@@ -182,7 +182,7 @@ pipeline {
 
             environment {
                 GIT_REPO_NAME = 'Three-Tier-DevSecOps'
-                GIT_USER_NAME = 'smarigurunathan'
+                GIT_USER_NAME = 'smarigurnathan'
             }
 
             steps {
