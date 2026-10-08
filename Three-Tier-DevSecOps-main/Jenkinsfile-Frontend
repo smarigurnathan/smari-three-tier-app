@@ -181,7 +181,7 @@ pipeline {
         stage('Update Deployment file') {
 
             environment {
-                GIT_REPO_NAME = 'Three-Tier-DevSecOps'
+                GIT_REPO_NAME = 'smari-three-tier-app'
                 GIT_USER_NAME = 'smarigurnathan'
             }
 
@@ -221,7 +221,7 @@ pipeline {
                             || echo "No changes to commit"
 
                             git push \
-                            https://${USERNAME}:${PASSWORD}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git \
+                            https://github.com/smarigurnathan/smari-three-tier-app.git
                             HEAD:main
                         '''
                     }
